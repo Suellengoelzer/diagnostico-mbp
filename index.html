@@ -540,6 +540,22 @@
     cta.href  = `https://wa.me/${WA}?text=${encodeURIComponent(msg)}`;
 
     show('s-result');
+    sendToKommo(score, cat.name);
+  }
+
+  function sendToKommo(score, categoria) {
+    fetch('https://diagnostico-kommo.contato-f37.workers.dev', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        nome:      lead.nome,
+        wa:        lead.wa,
+        ig:        lead.ig,
+        email:     lead.email,
+        score:     score,
+        categoria: categoria,
+      }),
+    }).catch(() => {});
   }
 </script>
 </body>
