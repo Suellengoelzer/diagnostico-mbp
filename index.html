@@ -540,10 +540,20 @@
     cta.href  = `https://wa.me/${WA}?text=${encodeURIComponent(msg)}`;
 
     show('s-result');
-    sendToKommo(score, cat.name);
+    sendToKommo(score, cat);
   }
 
-  function sendToKommo(score, categoria) {
+  function sendToKommo(score, cat) {
+    const div = document.createElement('div');
+    div.innerHTML = cat.body;
+    const resultado = (div.textContent || div.innerText || '').trim();
+
+    const respostas = QUESTIONS.map((q, i) => ({
+      area:     q.area,
+      question: q.text,
+      answer:   OPTIONS[answers[i] - 1].label,
+    }));
+
     fetch('https://diagnostico-kommo.contato-f37.workers.dev', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -552,8 +562,10 @@
         wa:        lead.wa,
         ig:        lead.ig,
         email:     lead.email,
-        score:     score,
-        categoria: categoria,
+        score,
+        categoria: cat.name,
+        resultado,
+        respostas,
       }),
     }).catch(() => {});
   }
