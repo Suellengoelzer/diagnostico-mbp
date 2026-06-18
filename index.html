@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <title>Diagnóstico de Posicionamento — MBP™</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg:        #0A0A0A;
+      --surface:   #131313;
+      --surface2:  #1C1C1C;
+      --border:    #2A2A2A;
+      --text:      #F0F0F0;
+      --muted:     #787878;
+      --gold:      #FFFFFF;
+      --gold-h:    #D0D0D0;
+      --danger:    #C0392B;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px 60px;
+    }
+
+    /* ---- CONTAINER ---- */
+    .screen {
+      width: 100%;
+      max-width: 500px;
+      animation: rise 0.35s ease both;
+    }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .hidden { display: none !important; }
+
+    /* ---- LOGO ---- */
+    .logo {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .logo-img {
+      width: 140px;
+      height: 140px;
+      object-fit: contain;
+      border-radius: 12px;
+    }
+
+    /* ---- TYPOGRAPHY ---- */
+    .tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: 26px;
+      font-weight: 500;
+      line-height: 1.35;
+      color: var(--text);
+      margin-bottom: 20px;
+    }
+
+    h2 {
+      font-size: 18px;
+      font-weight: 500;
+      line-height: 1.45;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .body-text {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.75;
+      margin-bottom: 14px;
+    }
+
+    .divider {
+      width: 36px;
+      height: 1px;
+      background: var(--gold);
+      margin: 28px 0;
+      opacity: 0.25;
+    }
+
+    /* ---- BUTTON ---- */
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 15px 24px;
+      background: var(--gold);
+      color: #0A0A0A;
+      font-weight: 700;
+      border: none;
+      border-radius: 3px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      transition: background 0.18s;
+      margin-top: 28px;
+    }
+
+    .btn:hover { background: var(--gold-h); }
+
+    /* ---- FORM ---- */
+    .field {
+      margin-bottom: 14px;
+    }
+
+    label {
+      display: block;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 7px;
+    }
+
+    input {
+      width: 100%;
+      padding: 13px 15px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.18s;
+      -webkit-appearance: none;
+    }
+
+    input:focus { border-color: var(--gold); }
+    input::placeholder { color: #3A3A3A; }
+
+    .form-error {
+      font-size: 13px;
+      color: var(--danger);
+      margin-top: 12px;
+      display: none;
+    }
+
+    /* ---- PROGRESS ---- */
+    .progress-wrap {
+      margin-bottom: 36px;
+    }
+
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+      margin-bottom: 9px;
+    }
+
+    .progress-track {
+      height: 2px;
+      background: var(--border);
+      border-radius: 2px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--gold);
+      border-radius: 2px;
+      transition: width 0.3s ease;
+    }
+
+    /* ---- QUESTION ---- */
+    .area-tag {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 18px;
+    }
+
+    .question-text {
+      font-size: 17px;
+      font-weight: 400;
+      line-height: 1.6;
+      color: var(--text);
+      margin-bottom: 28px;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .option-btn {
+      width: 100%;
+      padding: 15px 18px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 14px;
+      text-align: left;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s, color 0.15s;
+    }
+
+    .option-btn:hover {
+      border-color: var(--gold);
+      background: var(--surface2);
+    }
+
+    .option-btn.selected {
+      border-color: var(--gold);
+      background: var(--surface2);
+      color: var(--gold);
+    }
+
+    /* ---- BACK ---- */
+    .back-btn {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-family: inherit;
+      font-size: 13px;
+      cursor: pointer;
+      padding: 0;
+      margin-bottom: 32px;
+      letter-spacing: 0.03em;
+      transition: color 0.15s;
+    }
+
+    .back-btn:hover { color: var(--text); }
+
+    /* ---- RESULT ---- */
+    .result-label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .result-name {
+      font-size: 22px;
+      font-weight: 500;
+      color: var(--gold);
+      line-height: 1.35;
+      margin-bottom: 28px;
+    }
+
+    .result-body {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.78;
+    }
+
+    .result-body p { margin-bottom: 16px; }
+    .result-body p:last-child { margin-bottom: 0; }
+
+    .instagram-tag {
+      text-align: center;
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 20px;
+      letter-spacing: 0.03em;
+    }
+
+    /* ---- FOOTER ---- */
+    .page-footer {
+      margin-top: 56px;
+      text-align: center;
+      font-size: 11px;
+      color: #2E2E2E;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 380px) {
+      h1 { font-size: 22px; }
+      .question-text { font-size: 16px; }
+      .result-name { font-size: 19px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ======== INTRO ======== -->
+  <div id="s-intro" class="screen">
+    <div class="logo"><img src="logo.png" alt="MBP™ Mentoria" class="logo-img"></div>
+    <div class="tag">Diagnóstico gratuito</div>
+    <h1>Descubra em 3 minutos em qual estágio de posicionamento o seu negócio está.</h1>
+    <div class="divider"></div>
+    <p class="body-text">Responda de forma honesta 8 perguntas sobre o que você está vivendo agora no seu negócio.</p>
+    <button class="btn" onclick="show('s-form')">Começar diagnóstico</button>
+  </div>
+
+  <!-- ======== FORM ======== -->
+  <div id="s-form" class="screen hidden">
+    <div class="logo"><img src="logo.png" alt="MBP™ Mentoria" class="logo-img"></div>
+    <h2>Antes de começar, preencha abaixo com os seus dados para receber a sua análise personalizada.</h2>
+    <div class="divider"></div>
+    <div class="field">
+      <label for="f-nome">Nome</label>
+      <input id="f-nome" type="text" placeholder="Seu nome" autocomplete="given-name">
+    </div>
+    <div class="field">
+      <label for="f-wa">WhatsApp</label>
+      <input id="f-wa" type="tel" placeholder="(51) 99999-9999" autocomplete="tel">
+    </div>
+    <div class="field">
+      <label for="f-ig">Instagram</label>
+      <input id="f-ig" type="text" placeholder="@seuperfil">
+    </div>
+    <div class="field">
+      <label for="f-email">E-mail</label>
+      <input id="f-email" type="email" placeholder="seu@email.com" autocomplete="email">
+    </div>
+    <button class="btn" onclick="startDiag()">Iniciar diagnóstico</button>
+    <p id="f-error" class="form-error">Preencha todos os campos para continuar.</p>
+  </div>
+
+  <!-- ======== QUESTIONS ======== -->
+  <div id="s-questions" class="screen hidden">
+    <button class="back-btn" onclick="goBack()">← Voltar</button>
+    <div class="progress-wrap">
+      <div class="progress-meta">
+        <span id="q-area-meta"></span>
+        <span id="q-count"></span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="q-fill"></div>
+      </div>
+    </div>
+    <p class="area-tag" id="q-area-tag"></p>
+    <p class="question-text" id="q-text"></p>
+    <div class="options" id="q-opts"></div>
+  </div>
+
+  <!-- ======== RESULT ======== -->
+  <div id="s-result" class="screen hidden">
+    <div class="logo"><img src="logo.png" alt="MBP™ Mentoria" class="logo-img"></div>
+    <p class="result-label">Seu diagnóstico</p>
+    <div class="divider"></div>
+    <p class="result-name" id="r-name"></p>
+    <div class="result-body" id="r-body"></div>
+    <a id="r-cta" class="btn" href="#" target="_blank" rel="noopener"></a>
+    <p class="instagram-tag">@suellengoelzer_</p>
+  </div>
+
+  <p class="page-footer">Suellen Goelzer · MBP™</p>
+
+<script>
+  /* ---- DATA ---- */
+
+  const WA = '5551989747088';
+
+  const QUESTIONS = [
+    { area: 'Posicionamento',  text: 'Você já hesitou antes de mandar o link do seu perfil para alguém que poderia contratar você.' },
+    { area: 'Posicionamento',  text: 'A maioria dos seus clientes chega por indicação. Pelo digital, raramente alguém fecha.' },
+    { area: 'Comunicação',     text: 'Alguém já te perguntou como você é diferente dos outros profissionais que fazem a mesma coisa, e você ficou sem uma resposta boa.' },
+    { area: 'Comunicação',     text: 'Você já reescreveu sua bio várias vezes e ainda não ficou satisfeita com nenhuma versão.' },
+    { area: 'Marca pessoal',   text: 'Você sente que o que você faz é "mais do mesmo" e que existem muitos profissionais oferecendo a mesma coisa.' },
+    { area: 'Marca pessoal',   text: 'Você sente que precisa de mais experiência, mais seguidores ou mais resultado antes de investir em posicionamento.' },
+    { area: 'Conteúdo',        text: 'Para criar conteúdo, você primeiro olha o que outros profissionais do seu nicho estão publicando.' },
+    { area: 'Conteúdo',        text: 'Você já passou semanas publicando com regularidade sem conseguir identificar nenhuma relação entre o que postou e um cliente novo entrando em contato.' },
+  ];
+
+  const OPTIONS = [
+    { label: 'Não acontece',        value: 1 },
+    { label: 'Às vezes',            value: 2 },
+    { label: 'Frequentemente',      value: 3 },
+    { label: 'É a minha realidade', value: 4 },
+  ];
+
+  const CATEGORIES = [
+    {
+      min: 8, max: 14,
+      name: 'Posicionamento certo, mas comunicado errado',
+      body: `<p>Pelo que você respondeu, o seu posicionamento interno está alinhado, porque você sabe o que faz, para quem faz e o seu diferencial. Quem já te conhece fecha sem questionar o preço.</p><p>O problema é que quem chega sem ter sido indicada não enxerga isso. Cada pessoa que passa pelo seu perfil e vai embora é uma venda que aconteceria se você tivesse sido apresentada pessoalmente.</p><p>Você está deixando dinheiro na mesa, e o trabalho para mudar isso é pontual: fazer o seu perfil vender com a mesma força que o seu boca a boca já vende.</p>`,
+      btn:  'Quero que o meu perfil venda por mim',
+      wa:   'Olá Suellen! Fiz o diagnóstico de posicionamento e fiquei na categoria *Posicionamento certo, mas comunicado errado*. Quero que o meu perfil venda por mim.',
+    },
+    {
+      min: 15, max: 22,
+      name: 'Posicionamento desalinhado no perfil',
+      body: `<p>Pelo que você respondeu, o seu posicionamento não foi construído de forma intencional. Por isso não combina com quem você é e não é reconhecível por quem você quer atrair.</p><p>Qualquer esforço que você faz hoje em conteúdo ou frequência só amplia esse desalinhamento: postar mais, ter mais constância ou destravar nos stories não vai resolver, porque o problema está na estratégia, não na execução.</p><p>O trabalho aqui é corrigir a base para que o esforço que você já coloca no conteúdo finalmente retorne em venda.</p>`,
+      btn:  'Quero que o meu conteúdo finalmente comece a vender',
+      wa:   'Olá Suellen! Fiz o diagnóstico de posicionamento e fiquei na categoria *Posicionamento desalinhado no perfil*. Quero que o meu conteúdo finalmente comece a vender.',
+    },
+    {
+      min: 23, max: 32,
+      name: 'Sem posicionamento definido',
+      body: `<p>Pelo que você respondeu, você vende e o trabalho é bom. Quem já é seu cliente aprova e indica. O problema é que o seu diferencial ainda está invisível para quem não te conhece.</p><p>As tentativas que você fez no digital não funcionaram porque sem posicionamento definido não existe nada para comunicar. Sem posicionamento, você parece ser "mais do mesmo", igual a todo mundo.</p><p>O trabalho aqui é construir o posicionamento e a comunicação para que seu negócio pare de crescer só dentro do círculo de quem já te conhece.</p>`,
+      btn:  'Quero que o digital traga clientes que nunca me viram',
+      wa:   'Olá Suellen! Fiz o diagnóstico de posicionamento e fiquei na categoria *Sem posicionamento definido*. Quero que o digital traga clientes que nunca me viram.',
+    },
+  ];
+
+  /* ---- STATE ---- */
+  let qIndex  = 0;
+  let answers = [];
+  let lead    = {};
+
+  /* ---- UTILS ---- */
+  function show(id) {
+    document.querySelectorAll('.screen').forEach(el => el.classList.add('hidden'));
+    const el = document.getElementById(id);
+    el.classList.remove('hidden');
+    // re-trigger animation
+    el.style.animation = 'none';
+    el.offsetHeight; // reflow
+    el.style.animation = '';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  /* ---- FORM ---- */
+  function startDiag() {
+    const nome  = document.getElementById('f-nome').value.trim();
+    const wa    = document.getElementById('f-wa').value.trim();
+    const ig    = document.getElementById('f-ig').value.trim();
+    const email = document.getElementById('f-email').value.trim();
+    const err   = document.getElementById('f-error');
+
+    if (!nome || !wa || !ig || !email) {
+      err.textContent = 'Preencha todos os campos para continuar.';
+      err.style.display = 'block';
+      return;
+    }
+    if (!email.includes('@') || !email.includes('.')) {
+      err.textContent = 'Digite um e-mail válido.';
+      err.style.display = 'block';
+      return;
+    }
+
+    err.style.display = 'none';
+    lead = { nome, wa, ig, email };
+    qIndex  = 0;
+    answers = [];
+    renderQuestion();
+    show('s-questions');
+  }
+
+  /* ---- QUESTIONS ---- */
+  function renderQuestion() {
+    const q = QUESTIONS[qIndex];
+    const pct = ((qIndex + 1) / QUESTIONS.length * 100).toFixed(1);
+
+    document.getElementById('q-area-meta').textContent = q.area;
+    document.getElementById('q-count').textContent = `Pergunta ${qIndex + 1} de ${QUESTIONS.length}`;
+    document.getElementById('q-fill').style.width = pct + '%';
+    document.getElementById('q-area-tag').textContent = q.area;
+    document.getElementById('q-text').textContent = q.text;
+
+    const opts = document.getElementById('q-opts');
+    opts.innerHTML = '';
+    OPTIONS.forEach(opt => {
+      const btn = document.createElement('button');
+      btn.className = 'option-btn';
+      btn.textContent = opt.label;
+      btn.onclick = () => pick(opt.value, btn);
+      opts.appendChild(btn);
+    });
+  }
+
+  function pick(value, btn) {
+    document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+
+    setTimeout(() => {
+      answers[qIndex] = value;
+      if (qIndex < QUESTIONS.length - 1) {
+        qIndex++;
+        renderQuestion();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        showResult();
+      }
+    }, 280);
+  }
+
+  function goBack() {
+    if (qIndex > 0) {
+      qIndex--;
+      renderQuestion();
+    } else {
+      show('s-form');
+    }
+  }
+
+  /* ---- RESULT ---- */
+  function showResult() {
+    const score = answers.reduce((a, b) => a + b, 0);
+    const cat   = CATEGORIES.find(c => score >= c.min && score <= c.max);
+
+    document.getElementById('r-name').textContent = cat.name;
+    document.getElementById('r-body').innerHTML   = cat.body;
+
+    const cta  = document.getElementById('r-cta');
+    cta.textContent = cat.btn;
+
+    const msg = `${cat.wa}\n\nMeu nome é ${lead.nome}. Instagram: ${lead.ig}`;
+    cta.href  = `https://wa.me/${WA}?text=${encodeURIComponent(msg)}`;
+
+    show('s-result');
+  }
+</script>
+</body>
+</html>
